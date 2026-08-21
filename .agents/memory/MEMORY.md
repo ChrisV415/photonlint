@@ -7,3 +7,4 @@
 - [Clerk auth implementation](clerk-auth.md) — Replit-managed Clerk; proxy before body parsers; userId nullable on drc_runs; Tailwind v4 needs optimize:false; never gate clerkProxyUrl on NODE_ENV
 - [GitHub source sync](github-source-sync.md) — Connector-backed GitHub uploads need rate limiting; keep generated source ZIPs out of the repository
 - [Preliminary screening positioning](preliminary-screening-positioning.md) — PhotonLint is geometry screening, never official PDK validation or foundry sign-off without licensed, validated rule sources
+- [Terms acceptance enforcement](terms-acceptance-enforcement.md) — server-side current-terms gating must cover every authenticated DRC submission path, including API keys

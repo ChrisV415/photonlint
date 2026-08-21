@@ -13,6 +13,7 @@ import { FOUNDRIES, getEffectiveRules } from "./foundries.js";
 import { requireAuth } from "../middlewares/requireAuth.js";
 import { requireAuthOrApiKey, getEffectiveUserId } from "../middlewares/apiKeyAuth.js";
 import { buildScreeningContext, screeningContextFromLayoutData } from "../lib/screening.js";
+import { requireTermsAcceptance } from "../middlewares/requireTermsAcceptance.js";
 
 const router: IRouter = Router();
 
@@ -283,7 +284,8 @@ router.post(
   "/drc/check",
   drcCheckLimiter,      // 1. rate-limit before anything — no work on 429
   requireAuthOrApiKey,  // 2. auth check — accepts Clerk session OR Bearer API key
-  upload.single("file"), // 3. multipart parse
+   requireTermsAcceptance, // 3. current terms required for all submission paths
+   upload.single("file"), // 4. multipart parse
   async (req, res, next): Promise<void> => {
     const file = req.file;
     if (!file) {
@@ -419,6 +421,7 @@ router.post(
   "/drc/runs/import",
   importRunLimiter,
   requireAuthOrApiKey,
+   requireTermsAcceptance,
   async (req, res, next): Promise<void> => {
     const body = req.body as Record<string, unknown>;
 

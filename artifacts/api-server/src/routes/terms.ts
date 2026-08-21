@@ -3,14 +3,13 @@ import { getAuth } from "@clerk/express";
 import { db, termsAcceptancesTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
 import { requireAuth } from "../middlewares/requireAuth.js";
+import { CURRENT_TERMS_VERSION } from "../lib/terms.js";
 
 const router: IRouter = Router();
 
 // The terms version that must be accepted. Bump this string whenever the
 // terms text changes materially — existing users will be shown the new
 // version and must re-accept before they can continue using the app.
-const CURRENT_VERSION = "1.0";
-
 // ── GET /terms/status — has the current user accepted the current version? ────
 router.get("/terms/status", requireAuth, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { userId } = getAuth(req);
@@ -22,8 +21,8 @@ router.get("/terms/status", requireAuth, async (req: Request, res: Response, nex
       .where(eq(termsAcceptancesTable.userId, userId))
       .limit(1);
 
-    const accepted = !!row && row.version === CURRENT_VERSION;
-    res.json({ accepted, version: CURRENT_VERSION });
+    const accepted = !!row && row.version === CURRENT_TERMS_VERSION;
+    res.json({ accepted, version: CURRENT_TERMS_VERSION });
   } catch (err) {
     next(err);
   }
@@ -36,12 +35,12 @@ router.post("/terms/accept", requireAuth, async (req: Request, res: Response, ne
   try {
     await db
       .insert(termsAcceptancesTable)
-      .values({ userId, version: CURRENT_VERSION })
+      .values({ userId, version: CURRENT_TERMS_VERSION })
       .onConflictDoUpdate({
         target: termsAcceptancesTable.userId,
-        set: { version: CURRENT_VERSION, acceptedAt: new Date() },
+        set: { version: CURRENT_TERMS_VERSION, acceptedAt: new Date() },
       });
-    res.json({ accepted: true, version: CURRENT_VERSION });
+    res.json({ accepted: true, version: CURRENT_TERMS_VERSION });
   } catch (err) {
     next(err);
   }

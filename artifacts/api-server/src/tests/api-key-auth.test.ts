@@ -34,7 +34,7 @@ vi.mock("@clerk/shared/keys", () => ({
 
 import supertest from "supertest";
 import app from "../app.js";
-import { db, apiKeysTable } from "@workspace/db";
+import { db, apiKeysTable, termsAcceptancesTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
 
 // ── Test fixtures ─────────────────────────────────────────────────────────────
@@ -56,12 +56,16 @@ beforeAll(async () => {
     .values({ userId: API_KEY_OWNER, keyHash: KEY_HASH, label: "test-key" })
     .returning({ id: apiKeysTable.id });
   insertedKeyId = row.id;
+  await db
+    .insert(termsAcceptancesTable)
+    .values({ userId: API_KEY_OWNER, version: "1.0" });
 });
 
 afterAll(async () => {
   if (insertedKeyId) {
     await db.delete(apiKeysTable).where(eq(apiKeysTable.id, insertedKeyId));
   }
+  await db.delete(termsAcceptancesTable).where(eq(termsAcceptancesTable.userId, API_KEY_OWNER));
 });
 
 // ── Tests: POST /api/drc/check auth enforcement ───────────────────────────────
