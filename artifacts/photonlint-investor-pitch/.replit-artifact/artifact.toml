@@ -1,0 +1,27 @@
+kind = "slides"
+previewPath = "/photonlint-investor-pitch/"
+title = "PhotonLint — Investor Pitch"
+version = "1.0.0"
+id = "artifacts/photonlint-investor-pitch"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/photonlint-investor-pitch/" ]
+localPort = 25906
+
+[services.development]
+run = "pnpm --filter @workspace/photonlint-investor-pitch run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/photonlint-investor-pitch", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/photonlint-investor-pitch/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25906"
+BASE_PATH = "/photonlint-investor-pitch/"

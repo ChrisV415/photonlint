@@ -1,0 +1,31 @@
+# Tower Semiconductor PH18 — Silicon Photonics PDK
+# Reference values sourced from public Tower Semiconductor PH18 platform documentation.
+# Not an NDA-gated official PDK file. Verify against your foundry agreement before tape-out.
+
+id: tower-semi
+name: "Tower Semiconductor"
+description: "Tower Semiconductor PH18 silicon photonics process for co-packaged optics"
+technology: "Tower PH18"
+gridSize: 0.001  # µm — 1 nm grid
+
+layers:
+  - layer: 1
+    datatype: 0
+    name: "Si Strip Waveguide"
+    minWidth: 0.35      # µm — PH18 uses thinner SOI enabling narrower strip WGs
+    minSpacing: 0.18    # µm — tighter pitch possible due to advanced lithography node
+    minBendRadius: 4.0  # µm — 180 nm SOI enables tight bends with acceptable loss
+
+  - layer: 2
+    datatype: 0
+    name: "Si Rib Waveguide"
+    minWidth: 0.50      # µm — rib mode field wider than strip
+    minSpacing: 0.25    # µm — rib-to-rib spacing rule
+    minBendRadius: 2.5  # µm — rib waveguides allow tighter bends
+
+  - layer: 5
+    datatype: 0
+    name: "SiGe Modulator Active"
+    minWidth: 0.40      # µm — SiGe modulator active region minimum width
+    minSpacing: 0.30    # µm — modulator isolation spacing
+    minBendRadius: 0.0  # µm — modulator regions are straight segments; not applicable

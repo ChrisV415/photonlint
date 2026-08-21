@@ -1,0 +1,7 @@
+- [ReportLab XML escaping](reportlab-xml-escape.md) — user strings passed to Paragraph() must be xml_escape()'d or PDF crashes on < > &
+- [GDS file type mismatch pattern](gds-file-type.md) — backend accepts .gds and .gdsii; keep frontend drop/input accept attrs in sync
+- [STRtree spacing check](strtree-spacing.md) — spacing DRC uses shapely STRtree per layer-group, O(n log n), no polygon cap
+- [Rate limiter placement](rate-limiter-placement.md) — drcCheckLimiter must precede multer so files aren't parsed on 429 responses
+- [Bend radius circle-fit](bend-radius-circle-fit.md) — replaced angle heuristic with circumradius; returns (vertex, radius_µm, angle_deg)
+- [Override key auth pattern](override-key-auth.md) — PUT/DELETE /foundries/:id/override gated by FOUNDRY_OVERRIDE_KEY env secret + X-Override-Key header; client uses setOverrideKey() from api-client-react
+- [Clerk auth implementation](clerk-auth.md) — Replit-managed Clerk; proxy before body parsers; userId nullable on drc_runs; Tailwind v4 needs optimize:false; never gate clerkProxyUrl on NODE_ENV

@@ -1,0 +1,25 @@
+{
+  "name": "photonlint-cli",
+  "version": "0.1.0",
+  "description": "Run PhotonLint DRC checks locally — raw GDS never leaves your environment",
+  "type": "module",
+  "bin": {
+    "photonlint": "./bin/photonlint.js"
+  },
+  "files": [
+    "bin/",
+    "engine/",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "photonics",
+    "drc",
+    "gds",
+    "eda",
+    "photonlint"
+  ],
+  "license": "MIT"
+}

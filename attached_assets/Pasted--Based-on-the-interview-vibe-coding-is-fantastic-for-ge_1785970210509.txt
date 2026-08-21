@@ -1,0 +1,22 @@
+       Based on the interview, "vibe coding" is fantastic for getting a prototype or MVP up and running in minutes, but Alberta and the host both warn about a looming **"quality crisis"** if you take that AI-generated code straight into a real SaaS or production environment. 
+
+If you have just "vibe coded" an app and want to make it production-ready, here is what the transcript suggests you must do next:
+
+### 1. Shift from "Prompting" to "Ruthless Code Review"
+Alberta points out that when AI generates code, it often includes "little isms" and comically obvious AI quirks that are hard to spot in a fast-moving wall of text. 
+* **What to do:** You cannot blindly trust the output. You must transition into the traditional senior engineer role: **reviewing the code**. Alberta emphasizes that before anything goes into an important production system, you must figure out how to review it so that you have *"full faith in every single line of code."*
+
+### 2. Engineer for Failure and Edge Cases
+During the live demo, the host pointed out a major flaw in AI-generated apps: **fragility**. For example, if the AI builds a web scraper for your SaaS, what happens when the target website changes its layout or blocks the scraper the next day? The AI won't automatically know how to fix it, and your app will break.
+* **What to do:** You need to manually add resilience. Build error handling, fallback mechanisms, logging, and alerts. The AI will build the "happy path" (when everything works perfectly), but a human needs to architect the safety nets for when things go wrong.
+
+### 3. Stop Offloading Your "Thinking"
+Alberta discusses the anxiety many engineers feel about "forgetting how to code" and offloading too much thinking to AI. If you don't understand the architecture the AI just built, you won't be able to maintain it.
+* **What to do:** Force yourself to understand *how* the AI solved the problem. Even if you didn't write the syntax yourself, you must understand the data flow, the database schema, and the API connections so you can act as the "orchestrator" when the app needs to be scaled or updated.
+
+### 4. Implement a "Quality Workflow"
+Alberta notes that the industry hasn't quite figured out the perfect workflow yet to prevent AI from creating a "quality crisis" (i.e., a massive buildup of technical debt and buggy, unmaintainable code). 
+* **What to do:** Treat the vibe-coded app as raw material. Subject it to standard engineering rigor: write unit tests (you can use AI to help write these, but verify them), set up a CI/CD pipeline, and enforce security checks. 
+
+**The Takeaway:** 
+Vibe coding gets you **80% of the way there** by instantly solving the blank-page problem and giving you a working prototype. The final **20%—making it a reliable, secure, and maintainable SaaS**—requires you to put the "vibes" aside and put your senior engineer hat back on to review, fortify, and maintain the system.

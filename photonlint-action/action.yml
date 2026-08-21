@@ -1,0 +1,51 @@
+name: PhotonLint DRC Check
+description: Run a PhotonLint design-rule check on a GDSII file and fail the job if violations are found.
+author: PhotonLint
+
+inputs:
+  api_key:
+    description: PhotonLint API key (starts with plk_). Store as a repository secret.
+    required: true
+  gds_file:
+    description: Path to the GDSII file to check (relative to the repository root).
+    required: true
+  foundry_id:
+    description: |
+      Foundry rule set to check against. One of:
+        gf-45spclo    — GlobalFoundries 45SPCLO
+        aim-photonics — AIM Photonics
+        imec-isipp50g — imec iSiPP50G
+        tower-semi    — Tower Semiconductor
+    required: true
+  api_url:
+    description: Base URL of the PhotonLint API server (no trailing slash).
+    required: true
+  fail_on_violations:
+    description: Set to "false" to report violations without failing the workflow step.
+    required: false
+    default: "true"
+
+outputs:
+  status:
+    description: DRC result — "pass", "fail", or "error".
+    value: ${{ steps.run.outputs.status }}
+  violation_count:
+    description: Number of violations found.
+    value: ${{ steps.run.outputs.violation_count }}
+  run_id:
+    description: UUID of the DRC run — use to construct the results URL.
+    value: ${{ steps.run.outputs.run_id }}
+
+runs:
+  using: composite
+  steps:
+    - name: Run PhotonLint DRC
+      id: run
+      shell: bash
+      env:
+        INPUT_API_KEY: ${{ inputs.api_key }}
+        INPUT_GDS_FILE: ${{ inputs.gds_file }}
+        INPUT_FOUNDRY_ID: ${{ inputs.foundry_id }}
+        INPUT_API_URL: ${{ inputs.api_url }}
+        INPUT_FAIL_ON_VIOLATIONS: ${{ inputs.fail_on_violations }}
+      run: ${{ github.action_path }}/entrypoint.sh

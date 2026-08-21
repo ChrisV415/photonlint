@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "PhotonLint"
+version = "1.0.0"
+id = "artifacts/photonlint"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 21288
+
+[services.development]
+run = "pnpm --filter @workspace/photonlint run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/photonlint", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/photonlint/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "21288"
+BASE_PATH = "/"

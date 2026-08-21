@@ -1,0 +1,174 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "ZijJ26VNkh_BOcHfz_gw7"
+uri = "file://.local/outputs/PhotonLint---Investor-Pitch.pdf"
+type = "pdf"
+title = "PhotonLint — Investor Pitch.pdf"
+
+[[outputs]]
+id = "bd8HIPzI6SFvEt6wzyTwE"
+uri = "file://.local/outputs/PhotonLint---Engineering-Deep-Dive.pdf"
+type = "pdf"
+title = "PhotonLint — Engineering Deep-Dive.pdf"
+
+[[outputs]]
+id = "SV1BijbURyHHqUvc0Cj6W"
+uri = "file://photonlint-src.zip"
+type = "unspecified"
+title = "PhotonLint — Source Code"
+
+[[outputs]]
+id = "JQnZjfbyASwaQvLUlokkn"
+uri = "file://attached_assets/generated_images/photonlint-social.jpg"
+type = "image"
+title = "PhotonLint — LinkedIn / Twitter graphic"
+description = "Wide 16:9 social media image for PhotonLint. Works for both LinkedIn (1200×627) and Twitter/X (1600×900) — crop or post as-is."
+
+[[outputs]]
+id = "WUEH8OgB2KRkq39mowW1l"
+uri = "file://attached_assets/linkedin_01_drc_heatmap.jpg"
+type = "image"
+title = "1 — DRC Violation Heatmap"
+description = "Chip layout with glowing cyan waveguides and red violation markers. Great for posts about 'what PhotonLint catches'"
+
+[[outputs]]
+id = "MXxkCvSf3eP3XpV4S8D78"
+uri = "file://attached_assets/linkedin_02_spacing_violation.jpg"
+type = "image"
+title = "2 — Spacing Violation Close-up"
+description = "Macro shot of two waveguides dangerously close together with measurement arrows. Perfect for explaining spacing DRC rules."
+
+[[outputs]]
+id = "PXaPS4B62XjlbiCZ5qnC5"
+uri = "file://attached_assets/linkedin_03_clean_ci_pass.jpg"
+type = "image"
+title = "3 — Clean CI Pass Terminal"
+description = "Developer laptop showing 0 violations in terminal. Great for CI/CD integration posts."
+
+[[outputs]]
+id = "POOjx4mk2t8CcuUi5APHi"
+uri = "file://attached_assets/linkedin_04_bend_radius_comparison.jpg"
+type = "image"
+title = "4 — Bend Radius Pass vs. Fail"
+description = "Side-by-side: red X on tight hairpin bend vs. green check on correct bend radius. Educational content."
+
+[[outputs]]
+id = "KN5YBWjsfIO1A1iwZZVPp"
+uri = "file://attached_assets/linkedin_05_failed_tapeout.jpg"
+type = "image"
+title = "5 — Failed Tape-out Wafer"
+description = "Cracked silicon wafer with dramatic red lighting. Sobering post about the cost of DRC errors at tape-out."
+
+[[outputs]]
+id = "RS9Vwm6WnNr_e9XAhIqdE"
+uri = "file://attached_assets/linkedin_06_klayout_markers.jpg"
+type = "image"
+title = "6 — KLayout Violation Markers"
+description = "EDA tool showing yellow DRC markers overlaid on chip layout. For posts about the KLayout integration."
+
+[[outputs]]
+id = "0sXTqcND53PIKZ8_JrVLE"
+uri = "file://attached_assets/linkedin_07_violations_to_zero.jpg"
+type = "image"
+title = "7 — Violations Dropping to Zero"
+description = "Engineering dashboard with violation count trending to zero. Great for showing iterative improvement stories."
+
+[[outputs]]
+id = "dMe8JSKcB7r8HpjiXGyHr"
+uri = "file://attached_assets/linkedin_08_flatlay_product.jpg"
+type = "image"
+title = "8 — Premium Product Flatlay"
+description = "Clean overhead shot: photonic wafer, blueprint, and laptop showing green DRC pass. Polished brand content."
+
+[[outputs]]
+id = "ihPen_Kj-6aBFrE3KzYLn"
+uri = "file://attached_assets/linkedin_09_city_metaphor.jpg"
+type = "image"
+title = "9 — Chip as Neon City"
+description = "Chip layout reimagined as a glowing sci-fi city at night, with red hotspot zones. Visually striking metaphor post."
+
+[[outputs]]
+id = "vE5fqEHADEcK2hNKPP-pa"
+uri = "file://attached_assets/linkedin_10_engineer_zero_violations.jpg"
+type = "image"
+title = "10 — Engineer Celebrating Zero Violations"
+description = "Lone engineer in dark lab, face lit by monitor showing 0 violations. Emotional, cinematic. Great for team culture posts."
+
+[[outputs]]
+id = "F5lalLhjDdYwHQwWqLvIk"
+uri = "file://attached_assets/linkedin_v2_01_drc_heatmap.jpg"
+type = "image"
+title = "1 — Catch DRC Violations Before Tape-Out"
+description = "Chip layout + red violation markers. Hook: 'Catch DRC Violations Before Tape-Out.'"
+
+[[outputs]]
+id = "q-WCe28Dxk_ybezbezWHl"
+uri = "file://attached_assets/linkedin_v2_02_spacing.jpg"
+type = "image"
+title = "2 — Your fab has rules. We enforce them."
+description = "Spacing violation with measurement arrows and foundry PDK copy."
+
+[[outputs]]
+id = "IY4Z__SlGDgWmfnbGTQGo"
+uri = "file://attached_assets/linkedin_v2_03_ci_pass.jpg"
+type = "image"
+title = "3 — Zero violations in 1.8 seconds."
+description = "Terminal output + CI pipeline angle."
+
+[[outputs]]
+id = "xJdu-DEGorM0ShQ21ieee"
+uri = "file://attached_assets/linkedin_v2_04_bend_radius.jpg"
+type = "image"
+title = "4 — Bend radius failures kill your yield."
+description = "FAIL vs PASS side-by-side with µm measurements labeled."
+
+[[outputs]]
+id = "ovble6KT2Y_6Uf8Ieg1-e"
+uri = "file://attached_assets/linkedin_v2_05_tapeout_cost.jpg"
+type = "image"
+title = "5 — A DRC miss at tape-out costs $50,000+"
+description = "Cracked wafer + cost copy. High-impact scroll-stopper."
+
+[[outputs]]
+id = "YNLPqa4vCYp9D2rzL1iPR"
+uri = "file://attached_assets/linkedin_v2_06_klayout.jpg"
+type = "image"
+title = "6 — Now your team can see violations in KLayout."
+description = "KLayout .lyrdb integration announcement."
+
+[[outputs]]
+id = "rZwYdGK2S4xrtX_4-RoDR"
+uri = "file://attached_assets/linkedin_v2_07_violations_chart.jpg"
+type = "image"
+title = "7 — From 47 violations to 0."
+description = "Dashboard line chart showing improvement over runs."
+
+[[outputs]]
+id = "Aw4FM2E_swUs0iOTN1QZM"
+uri = "file://attached_assets/linkedin_v2_08_flatlay.jpg"
+type = "image"
+title = "8 — Built for silicon photonics engineers."
+description = "Premium flatlay — wafer + blueprint + laptop. Clean Apple aesthetic."
+
+[[outputs]]
+id = "vbAjVL0EdD28OXEX4Wbwg"
+uri = "file://attached_assets/linkedin_v2_09_city.jpg"
+type = "image"
+title = "9 — Every polygon. Every layer. Every rule."
+description = "Chip-as-neon-city with feature copy."
+
+[[outputs]]
+id = "2_biJ8CIVF0BPG7Mpp9Cw"
+uri = "file://attached_assets/linkedin_v2_10_engineer.jpg"
+type = "image"
+title = "10 — That feeling when the DRC is clean."
+description = "Cinematic engineer moment + photonlint.com CTA."
+
+[[outputs]]
+id = "QZ8fO_P6qGHiuC8TSxZ-W"
+uri = "file://exports/photonlint-source.zip"
+type = "unspecified"
+title = "PhotonLint Complete Source Code"
+description = "Full PhotonLint source archive including application code, API server, CLI, DRC engines, frontend, tests, configuration, documentation, and project assets. Excludes node_modules, caches, Git internals, build output, and secrets."

@@ -1,0 +1,27 @@
+kind = "slides"
+previewPath = "/photonlint-engineering-deep-dive/"
+title = "PhotonLint — Engineering Deep-Dive"
+version = "1.0.0"
+id = "artifacts/photonlint-engineering-deep-dive"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/photonlint-engineering-deep-dive/" ]
+localPort = 25509
+
+[services.development]
+run = "pnpm --filter @workspace/photonlint-engineering-deep-dive run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/photonlint-engineering-deep-dive", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/photonlint-engineering-deep-dive/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25509"
+BASE_PATH = "/photonlint-engineering-deep-dive/"

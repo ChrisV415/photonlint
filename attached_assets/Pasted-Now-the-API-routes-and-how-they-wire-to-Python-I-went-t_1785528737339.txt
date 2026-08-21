@@ -1,0 +1,18 @@
+Now the API routes and how they wire to Python:I went through the actual codebase — this is a real, full-stack build, well past the Streamlit MVP we started with. Here's what I found:
+
+**What's genuinely solid:**
+- **DRC engine** — now layer-aware (per-PDK-layer thresholds instead of one global rule), grid-snap check improved to round-to-nearest instead of modulo (better floating-point behavior near boundaries), and spacing check now uses a `shapely.STRtree` spatial index — that's the R-tree upgrade I'd flagged as needed before full-chip scale, done correctly (buffer-then-exact-distance pattern, grouped by layer so cross-layer overlap isn't falsely flagged).
+- **API server** — genuinely careful engineering: rate limiting on the expensive endpoint, hard timeouts with `SIGKILL` on both the DRC subprocess and PDF subprocess (so a malformed GDS can't hang the server), UUID validation before hitting the DB, multer file-type/size limits, temp file cleanup in `finally` blocks, CORS locked to Replit domains rather than wide open.
+- **PDK override system** (the "customize defaults" feature from the deck) is real and working — YAML defaults, DB-backed per-foundry overrides, validated numeric ranges, one-click revert.
+- **Layout viewer** — real SVG pan/zoom, PDK-layer coloring, violation highlighting with click-to-select, sensible fallback when `configuredLayers` is absent. This is more capable than the vector mockup I built for the slide deck.
+- Foundry YAML files carry honest "reference values, not NDA-gated PDK, verify before tape-out" disclaimers — consistent with what we discussed matters here.
+
+**Two things worth your attention:**
+
+1. **Bend-radius reverted to the plain angle-heuristic** — the circle-fitting approach I built (and had to fix three separate numerical-stability bugs in) isn't in this engine; it's back to "flag sharp turns over short edges," with the same known false-positive-on-right-angle-couplers and false-negative-on-smooth-curves limitations. It's honestly labeled as heuristic/WARNING in both the code and the PDF footer, so nothing's being oversold — but if that circle-fit work was supposed to carry forward, it didn't.
+
+2. **No authentication anywhere in the API** — not on `/drc/check`, and notably not on `PUT /foundries/:id/override`. Since overrides persist and "apply automatically on subsequent runs" (per the product deck), anyone who can reach the API can silently loosen another engineer's DRC thresholds — e.g. widen `minSpacing` so a real crosstalk violation stops getting flagged. For an internal MVP demo this is a normal thing to defer, but it's the one gap I'd treat as blocking before this touches a layout anyone's actually tape-out-deciding on.
+
+Smaller note: the engine uses `gdspy`, not the `gdstk` migration I'd done earlier — that's consistent with `replit.md` and the architecture deck, so it looks like a deliberate choice rather than a regression, just flagging the divergence from our last session.
+
+Want me to dig into any of these — bring the circle-fit bend check back into this engine, or add auth to the override endpoint?

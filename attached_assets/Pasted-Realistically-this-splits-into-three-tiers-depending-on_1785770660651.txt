@@ -1,0 +1,21 @@
+Realistically, this splits into three tiers depending on who's asking — an individual engineer testing casually asks almost none of this out loud but still silently checks for it; a startup founder/CTO asks a few pointed questions before letting their team use it; a university lab may run it through an actual institutional process. Here's what each tier will actually want, and where you already stand:
+
+**Tier 1 — Individual engineer, casual test (lowest bar, but not zero)**
+- *"Who else can see this file?"* — you've already answered this with the beta-access gate. Good.
+- *"Is this actually private, or does someone review/train on my upload?"* — you don't have a stated answer to this yet. Even a one-line note ("we don't view, retain beyond the session, or use uploads for anything but generating your report") goes a long way for a first-time tester and costs you almost nothing to write.
+- *"Is my data encrypted in transit?"* — HTTPS via Replit should already cover this; worth confirming rather than assuming.
+
+**Tier 2 — Startup founder/CTO deciding whether their team can use it**
+- **Confidentiality of uploaded IP.** This is the one that actually blocks adoption if unanswered — a founder won't let an engineer upload a pre-patent layout to an unknown tool without at least a basic written confidentiality commitment. You don't need a full NDA for a beta; a short data-handling clause in a lightweight ToS usually clears this bar.
+- **"Is this a real company, or a side project?"** — legitimacy signal. Having *any* LLC/entity named, a real domain, and a ToS page changes how seriously this gets taken internally, separate from whether the tool works.
+- **Liability if the tool is wrong.** You've got the "not certified for tape-out sign-off" disclaimer in the UI already — for this tier, that needs to be an actual clickthrough agreement they accept before uploading, not just a footer note, per the earlier discussion.
+- **Where is this hosted, and by whom.** A well-run startup with any export-control awareness may ask directly: is this US-hosted, does anyone outside the US have access to uploaded data. This is the same question you're already waiting on counsel for — just now it's coming *at* you instead of you raising it internally.
+
+**Tier 3 — University lab / institutional pilot (highest bar, and it cuts both ways)**
+This is worth taking seriously specifically because of who's on your outreach list — universities run actual IT security and data-governance review before staff/students use third-party tools, even for something that looks like "just a free demo." Two things they'll specifically check, both tied to what we already flagged:
+- **Export control status**, from *their* side — universities deal with deemed-export compliance constantly (foreign students, foreign researchers), so a lab may ask *you* directly whether your tool or its use triggers anything, rather than assuming it doesn't. If your own classification isn't resolved, you won't have an answer ready when this comes up.
+- **Data residency and retention** — where's it hosted, how long is it kept, can it be deleted on request. Formal enough places will want this in writing, not "I think so."
+
+**Net effect on sequencing:** the export-control determination isn't just a thing you need for your own protection — for the university-tier contacts specifically (AIM Photonics program, any lab with real compliance overhead), it may be the *first question they ask you*, before they'll even try the free version. That's a concrete reason to get that answer back before reaching out to Tier 3, even though Tier 1/2 outreach (OpenLight, Skorpios) can reasonably proceed now.
+
+Want me to draft the short data-handling/ToS clause that covers most of Tier 1 and Tier 2 in one page, so you have something ready before the first message goes out?

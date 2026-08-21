@@ -1,0 +1,27 @@
+kind = "slides"
+previewPath = "/photonlint-product-overview/"
+title = "PhotonLint — Product Overview"
+version = "1.0.0"
+id = "artifacts/photonlint-product-overview"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/photonlint-product-overview/" ]
+localPort = 23574
+
+[services.development]
+run = "pnpm --filter @workspace/photonlint-product-overview run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/photonlint-product-overview", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/photonlint-product-overview/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23574"
+BASE_PATH = "/photonlint-product-overview/"

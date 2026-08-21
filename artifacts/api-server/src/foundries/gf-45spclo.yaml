@@ -1,0 +1,31 @@
+# GlobalFoundries 45SPCLO — Silicon Photonics PDK
+# Reference values sourced from public GF 45SPCLO documentation and published research.
+# Not an NDA-gated official PDK file. Verify against your foundry agreement before tape-out.
+
+id: gf-45spclo
+name: "GlobalFoundries 45SPCLO"
+description: "45nm Silicon Photonics CMOS platform for high-volume photonic integration"
+technology: "GF 45SPCLO"
+gridSize: 0.001  # µm — 1 nm manufacturing grid
+
+layers:
+  - layer: 1
+    datatype: 0
+    name: "Si Strip Waveguide"
+    minWidth: 0.45      # µm — minimum single-mode strip waveguide width
+    minSpacing: 0.20    # µm — minimum gap before evanescent coupling
+    minBendRadius: 5.0  # µm — minimum bend radius to keep insertion loss < 0.1 dB
+
+  - layer: 2
+    datatype: 0
+    name: "Si Rib Waveguide"
+    minWidth: 0.65      # µm — rib waveguide slab requires wider minimum
+    minSpacing: 0.30    # µm — rib-to-rib gap to prevent crosstalk
+    minBendRadius: 3.0  # µm — rib bends can be tighter than strip due to stronger confinement
+
+  - layer: 10
+    datatype: 0
+    name: "Contact (CO)"
+    minWidth: 0.08      # µm — minimum contact opening per 45nm lithography
+    minSpacing: 0.09    # µm — contact-to-contact minimum pitch
+    minBendRadius: 0.0  # µm — contacts are rectangular; bend radius not applicable

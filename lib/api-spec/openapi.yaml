@@ -1,0 +1,679 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: PhotonLint API — Design Rule Checker for Silicon Photonics
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: foundries
+    description: Foundry PDK operations
+  - name: drc
+    description: Design Rule Check operations
+  - name: Auth
+    description: Browser and mobile authentication endpoints.
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /foundries:
+    get:
+      operationId: listFoundries
+      tags: [foundries]
+      summary: List available foundry PDKs
+      description: Returns all supported foundry Process Design Kits with their per-layer rule sets
+      responses:
+        "200":
+          description: List of foundries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Foundry"
+
+  /foundries/{id}/override:
+    put:
+      operationId: setFoundryOverride
+      tags: [foundries]
+      summary: Save custom PDK rule values for a foundry
+      description: |
+        Upserts engineer-supplied rule values for the given foundry. When an override
+        is active, the DRC engine uses these values instead of the bundled YAML defaults.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FoundryOverrideInput"
+      responses:
+        "200":
+          description: Updated foundry with the applied override
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Foundry"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Foundry not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+    delete:
+      operationId: deleteFoundryOverride
+      tags: [foundries]
+      summary: Remove custom PDK rule values and revert to defaults
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Foundry reverted to YAML defaults
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Foundry"
+        "404":
+          description: Foundry not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+  /drc/check:
+    post:
+      operationId: runDrcCheck
+      tags: [drc]
+      summary: Run DRC on uploaded GDS file
+      description: |
+        Upload a GDSII layout file (multipart/form-data with fields: file, foundryId)
+        and run Design Rule Checks against the selected foundry PDK.
+        Send as multipart/form-data — file field contains the .gds file, foundryId is a string.
+      responses:
+        "200":
+          description: DRC results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DrcResult"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "500":
+          description: Processing error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+  /drc/runs:
+    get:
+      operationId: listDrcRuns
+      tags: [drc]
+      summary: List recent DRC runs
+      description: Returns recent DRC runs with summary information
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: number
+            default: 20
+      responses:
+        "200":
+          description: List of recent DRC runs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DrcRunSummary"
+
+  /drc/runs/{id}:
+    get:
+      operationId: getDrcRun
+      tags: [drc]
+      summary: Get a single DRC run by ID
+      description: Returns the full DRC result including violations and layout data
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Full DRC result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DrcResult"
+        "404":
+          description: Run not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+  /drc/stats:
+    get:
+      operationId: getDrcStats
+      tags: [drc]
+      summary: Get aggregate DRC statistics
+      description: Returns aggregate statistics across all DRC runs
+      responses:
+        "200":
+          description: DRC statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DrcStats"
+
+  /auth/user:
+    get:
+      tags: [Auth]
+      operationId: getCurrentAuthUser
+      summary: Get the currently authenticated user
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationSessionHeader'
+        - $ref: '#/components/parameters/SessionCookie'
+      responses:
+        '200':
+          description: Auth status resolved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthUserEnvelope'
+  /login:
+    get:
+      tags: [Auth]
+      operationId: beginBrowserLogin
+      summary: Start the browser OIDC login flow
+      parameters:
+        - name: returnTo
+          in: query
+          required: false
+          description: Relative path to redirect to after login (must start with `/`). Defaults to `/`.
+          schema:
+            type: string
+      responses:
+        '302':
+          description: Redirect to the OIDC authorization endpoint.
+  /callback:
+    get:
+      tags: [Auth]
+      operationId: handleBrowserLoginCallback
+      summary: Complete the browser OIDC login flow
+      parameters:
+        - name: code
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: state
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: iss
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '302':
+          description: Redirect to the `returnTo` path on success (defaults to `/`) or `/api/login` on failure.
+  /logout:
+    get:
+      tags: [Auth]
+      operationId: logoutBrowserSession
+      summary: Clear the session and begin OIDC logout
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationSessionHeader'
+        - $ref: '#/components/parameters/SessionCookie'
+        - name: returnTo
+          in: query
+          required: false
+          schema:
+            type: string
+            default: /
+      responses:
+        '302':
+          description: Redirect to the OIDC provider logout URL with a post-logout redirect back to the validated `returnTo` path.
+  /mobile-auth/token-exchange:
+    post:
+      tags: [Auth]
+      operationId: exchangeMobileAuthorizationCode
+      summary: Exchange a mobile OIDC code for a session token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MobileTokenExchangeRequest'
+      responses:
+        '200':
+          description: Session created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MobileTokenExchangeSuccess'
+        '400':
+          description: Missing or invalid required fields.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+        '401':
+          description: Token did not contain usable claims.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+        '500':
+          description: Token exchange failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+  /mobile-auth/logout:
+    post:
+      tags: [Auth]
+      operationId: logoutMobileSession
+      summary: Delete a mobile session token
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationSessionHeader'
+      responses:
+        '200':
+          description: Logout processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoutSuccess'
+
+components:
+  parameters:
+    AuthorizationSessionHeader:
+      name: Authorization
+      in: header
+      required: false
+      description: Opaque session token — `Bearer <sid>`.
+      schema:
+        type: string
+    SessionCookie:
+      name: sid
+      in: cookie
+      required: false
+      description: Browser session cookie.
+      schema:
+        type: string
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    FoundryLayer:
+      type: object
+      description: Per-layer design rules for a specific GDS process layer
+      properties:
+        layer:
+          type: number
+          description: GDS layer number
+        datatype:
+          type: number
+          description: GDS datatype number
+        name:
+          type: string
+          description: Human-readable layer name (e.g. "Si Strip Waveguide")
+        minWidth:
+          type: number
+          description: Minimum feature width in microns
+        minSpacing:
+          type: number
+          description: Minimum spacing between features in microns
+        minBendRadius:
+          type: number
+          description: Minimum bend radius in microns (0 = not applicable for this layer)
+      required: [layer, datatype, name, minWidth, minSpacing, minBendRadius]
+
+    FoundryOverrideInput:
+      type: object
+      description: Custom PDK rule values to override the bundled YAML defaults
+      properties:
+        gridSize:
+          type: number
+          description: Manufacturing grid snap size in microns
+        layers:
+          type: array
+          description: Per-layer rule overrides
+          items:
+            $ref: "#/components/schemas/FoundryLayer"
+      required: [gridSize, layers]
+
+    Foundry:
+      type: object
+      description: A foundry Process Design Kit with per-layer design rules
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        technology:
+          type: string
+          description: Technology node / process name
+        gridSize:
+          type: number
+          description: Manufacturing grid snap size in microns (applies to all layers)
+        layers:
+          type: array
+          description: Per-layer design rules — each configured GDS layer has its own thresholds
+          items:
+            $ref: "#/components/schemas/FoundryLayer"
+        hasOverride:
+          type: boolean
+          description: True when engineer-supplied custom rules are active for this foundry
+        defaults:
+          type: object
+          description: YAML default values — present only when hasOverride is true, for diff display
+          properties:
+            gridSize:
+              type: number
+            layers:
+              type: array
+              items:
+                $ref: "#/components/schemas/FoundryLayer"
+          required: [gridSize, layers]
+      required: [id, name, description, technology, gridSize, layers, hasOverride]
+
+    LayoutPolygon:
+      type: object
+      description: A single polygon in the GDS layout
+      properties:
+        layer:
+          type: number
+        datatype:
+          type: number
+        vertices:
+          type: array
+          description: Polygon vertices as [[x, y], ...] in microns
+          items:
+            type: array
+            items:
+              type: number
+        isPdkLayer:
+          type: boolean
+          description: True if this polygon's layer is configured in the selected PDK
+      required: [layer, datatype, vertices]
+
+    ConfiguredLayer:
+      type: object
+      description: A PDK-configured layer that was checked
+      properties:
+        layer:
+          type: number
+        datatype:
+          type: number
+        name:
+          type: string
+      required: [layer, datatype, name]
+
+    LayoutBounds:
+      type: object
+      description: Bounding box of the entire layout in microns
+      properties:
+        minX: { type: number }
+        minY: { type: number }
+        maxX: { type: number }
+        maxY: { type: number }
+      required: [minX, minY, maxX, maxY]
+
+    LayoutData:
+      type: object
+      description: Full layout geometry for visual rendering
+      properties:
+        bounds:
+          $ref: "#/components/schemas/LayoutBounds"
+        polygons:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutPolygon"
+        configuredLayers:
+          type: array
+          description: List of PDK-configured layers that were DRC-checked
+          items:
+            $ref: "#/components/schemas/ConfiguredLayer"
+      required: [bounds, polygons]
+
+    DrcViolation:
+      type: object
+      description: A single DRC rule violation found in the layout
+      properties:
+        rule:
+          type: string
+          description: Name of the violated design rule
+        requirement:
+          type: string
+          description: The required value per the PDK
+        location:
+          type: string
+          description: Location of the violation in the layout
+        severity:
+          type: string
+          enum: [critical, warning, info]
+        details:
+          type: string
+          description: Additional details about the violation
+        geometry:
+          type: ["array", "null"]
+          description: Polygon vertices [[x, y], ...] in microns for visual highlighting
+          items:
+            type: array
+            items:
+              type: number
+      required: [rule, requirement, location, severity, details]
+
+    DrcResult:
+      type: object
+      description: Complete DRC result for a layout file
+      properties:
+        id:
+          type: string
+        foundryId:
+          type: string
+        foundryName:
+          type: string
+        filename:
+          type: string
+        status:
+          type: string
+          enum: [pass, fail, error]
+        violationCount:
+          type: number
+        passedChecks:
+          type: number
+        totalChecks:
+          type: number
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/DrcViolation"
+        errorMessage:
+          type: ["string", "null"]
+        checkedAt:
+          type: string
+          format: date-time
+        processingTimeMs:
+          type: number
+        layoutData:
+          oneOf:
+            - $ref: "#/components/schemas/LayoutData"
+            - type: "null"
+      required: [id, foundryId, foundryName, filename, status, violationCount, passedChecks, totalChecks, violations, errorMessage, checkedAt, processingTimeMs]
+
+    DrcRunSummary:
+      type: object
+      description: Summary of a past DRC run
+      properties:
+        id:
+          type: string
+        foundryId:
+          type: string
+        foundryName:
+          type: string
+        filename:
+          type: string
+        status:
+          type: string
+          enum: [pass, fail, error]
+        violationCount:
+          type: number
+        checkedAt:
+          type: string
+          format: date-time
+        processingTimeMs:
+          type: number
+      required: [id, foundryId, foundryName, filename, status, violationCount, checkedAt, processingTimeMs]
+
+    CommonViolation:
+      type: object
+      description: A frequently occurring violation type
+      properties:
+        rule:
+          type: string
+        count:
+          type: number
+        percentage:
+          type: number
+      required: [rule, count, percentage]
+
+    DrcStats:
+      type: object
+      description: Aggregate statistics across all DRC runs
+      properties:
+        totalRuns:
+          type: number
+        passCount:
+          type: number
+        failCount:
+          type: number
+        errorCount:
+          type: number
+        passRate:
+          type: number
+          description: Percentage of runs that passed (0-100)
+        totalViolations:
+          type: number
+        avgViolationsPerRun:
+          type: number
+        commonViolations:
+          type: array
+          items:
+            $ref: "#/components/schemas/CommonViolation"
+      required: [totalRuns, passCount, failCount, errorCount, passRate, totalViolations, avgViolationsPerRun, commonViolations]
+
+    ApiError:
+      type: object
+      properties:
+        error:
+          type: string
+      required: [error]
+
+    AuthUser:
+      type: object
+      required: [id, email, firstName, lastName, profileImageUrl]
+      properties:
+        id:
+          type: string
+        email:
+          type: [string, 'null']
+        firstName:
+          type: [string, 'null']
+        lastName:
+          type: [string, 'null']
+        profileImageUrl:
+          type: [string, 'null']
+    AuthUserEnvelope:
+      type: object
+      required: [user]
+      properties:
+        user:
+          oneOf:
+            - $ref: '#/components/schemas/AuthUser'
+            - type: 'null'
+    MobileTokenExchangeRequest:
+      type: object
+      required: [code, code_verifier, redirect_uri, state]
+      properties:
+        code:
+          type: string
+          minLength: 1
+        code_verifier:
+          type: string
+          minLength: 1
+        redirect_uri:
+          type: string
+          minLength: 1
+        state:
+          type: string
+          minLength: 1
+        nonce:
+          type: string
+          minLength: 1
+    MobileTokenExchangeSuccess:
+      type: object
+      required: [token]
+      properties:
+        token:
+          type: string
+    LogoutSuccess:
+      type: object
+      required: [success]
+      properties:
+        success:
+          type: boolean
+          const: true
+    ErrorEnvelope:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string

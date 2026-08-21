@@ -1,0 +1,82 @@
+[
+  {
+    "id": "e1f2a3b4-c5d6-4789-0123-456789abcde1",
+    "position": 1,
+    "filepath": "src/pages/slides/Slide01Title.tsx",
+    "title": "PhotonLint — System Architecture",
+    "description": "Title slide — Architecture & Implementation of the PhotonLint DRC Engine",
+    "speakerNotes": ""
+  },
+  {
+    "id": "f2a3b4c5-d6e7-4890-1234-56789abcdef2",
+    "position": 2,
+    "filepath": "src/pages/slides/Slide02GDSFile.tsx",
+    "title": "What a GDS file is and why checking it is hard",
+    "description": "GDSII format, polygon layers, sub-micron tolerances, naive check failures",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a3b4c5d6-e7f8-4901-2345-6789abcdef03",
+    "position": 3,
+    "filepath": "src/pages/slides/Slide03Stack.tsx",
+    "title": "Stack: React → Express → Python subprocess",
+    "description": "6-layer architecture: frontend, API, DRC engine, DB, contract, PDF",
+    "speakerNotes": ""
+  },
+  {
+    "id": "b4c5d6e7-f8a9-4012-3456-789abcdef014",
+    "position": 4,
+    "filepath": "src/pages/slides/Slide04GridWidth.tsx",
+    "title": "Check 1 & 2: Grid snap + true minimum width",
+    "description": "Grid snap heuristic and rotated-rectangle true width via shapely",
+    "speakerNotes": ""
+  },
+  {
+    "id": "c5d6e7f8-a9b0-4123-4567-89abcdef0125",
+    "position": 5,
+    "filepath": "src/pages/slides/Slide05Spacing.tsx",
+    "title": "Check 3: Minimum spacing via exact polygon distance",
+    "description": "shapely polygon.distance() — exact vs naive approaches, O(n²) limit",
+    "speakerNotes": ""
+  },
+  {
+    "id": "d6e7f8a9-b0c1-4234-5678-9abcdef01236",
+    "position": 6,
+    "filepath": "src/pages/slides/Slide06BendRadius.tsx",
+    "title": "Check 4: Bend radius heuristic — honest about its limits",
+    "description": "Vertex turn angle heuristic, known false positives and false negatives",
+    "speakerNotes": ""
+  },
+  {
+    "id": "e7f8a9b0-c1d2-4345-6789-abcdef012347",
+    "position": 7,
+    "filepath": "src/pages/slides/Slide07PDFPipeline.tsx",
+    "title": "PDF report pipeline: report.py + reportlab",
+    "description": "DB → Node → Python stdin/stdout → reportlab → browser download",
+    "speakerNotes": ""
+  },
+  {
+    "id": "f8a9b0c1-d2e3-4456-789a-bcdef0123458",
+    "position": 8,
+    "filepath": "src/pages/slides/Slide08APIDesign.tsx",
+    "title": "API design: OpenAPI → codegen → typed end-to-end",
+    "description": "openapi.yaml → Orval → React hooks + Zod schemas, file upload exception",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a9b0c1d2-e3f4-4567-89ab-cdef01234569",
+    "position": 9,
+    "filepath": "src/pages/slides/Slide09KnownLimits.tsx",
+    "title": "Known limits and the path to production scale",
+    "description": "O(n²) spacing, single layer, reference rules, no OASIS — scoped next steps",
+    "speakerNotes": ""
+  },
+  {
+    "id": "b0c1d2e3-f4a5-4678-9abc-def012345670",
+    "position": 10,
+    "filepath": "src/pages/slides/Slide10Roadmap.tsx",
+    "title": "Roadmap: from MVP to production DRC engine",
+    "description": "Near-term: layout viewer, PDK YAMLs. Medium: R-tree, OASIS. Long: arc reconstruction",
+    "speakerNotes": ""
+  }
+]

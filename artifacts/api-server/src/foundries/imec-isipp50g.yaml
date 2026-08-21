@@ -1,0 +1,38 @@
+# imec iSiPP50G — Silicon Photonics R&D Platform
+# Reference values sourced from published imec iSiPP50G platform papers and conference presentations.
+# Not an NDA-gated official PDK file. Verify against your foundry agreement before tape-out.
+
+id: imec-isipp50g
+name: "imec iSiPP50G"
+description: "imec's 50G Silicon Photonics platform — advanced R&D node for photonic integration"
+technology: "imec iSiPP50G"
+gridSize: 0.001  # µm — 1 nm grid
+
+layers:
+  - layer: 1
+    datatype: 0
+    name: "Si Waveguide (220 nm SOI)"
+    minWidth: 0.48      # µm — iSiPP50G strip WG at 220 nm thickness
+    minSpacing: 0.30    # µm — strip-to-strip gap for < -25 dB crosstalk
+    minBendRadius: 2.5  # µm — advanced node allows very tight bends
+
+  - layer: 2
+    datatype: 0
+    name: "SiN Waveguide (400 nm)"
+    minWidth: 0.70      # µm — 400 nm thick SiN single-mode WG minimum
+    minSpacing: 0.50    # µm — SiN-to-SiN isolation
+    minBendRadius: 50.0 # µm — SiN index contrast requires large bends
+
+  - layer: 3
+    datatype: 0
+    name: "Ge-on-Si Photodetector"
+    minWidth: 1.00      # µm — minimum Ge mesa for efficient light absorption
+    minSpacing: 0.60    # µm — Ge isolation spacing
+    minBendRadius: 0.0  # µm — Ge mesas are rectangular; not applicable
+
+  - layer: 6
+    datatype: 0
+    name: "Doped Si (p+ contact)"
+    minWidth: 0.12      # µm — minimum implant region width
+    minSpacing: 0.14    # µm — implant-to-implant design rule
+    minBendRadius: 0.0  # µm — not applicable for doped regions

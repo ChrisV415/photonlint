@@ -1,0 +1,25 @@
+Good question to ask before opening this up further — and the search turned up something more consequential than I expected, so let me lead with that.
+
+**Export controls (EAR) — this is the one that needs a professional, not a template**
+
+GDSII isn't just relevant here incidentally — it's a term explicitly defined in the EAR itself (Part 772, Category 3), and BIS's Commerce Control List includes ECCN entries specifically for *"software designed to extract GDSII or equivalent data."* PhotonLint's entire function is parsing and extracting geometric data from GDSII files. That doesn't automatically mean the tool is export-controlled — classification depends on the specific technical parameters in play (the ECCN entries found are tied to contexts like quantum computing items, EUV mask/reticle technology, and advanced IC development) — but it means the question is a real one, not a hypothetical.
+
+Two things make this more urgent, not less, given what we've already discussed:
+- Your own beta outreach list includes **non-US entities** — imec (Belgium), SiEPIC/UBC (Canada). Under the EAR's "deemed export" rule, giving a foreign national or foreign entity access to controlled technical data — even domestically, even just by letting them log in and use software — can itself be treated as an export.
+- You already flagged EAR exposure once before, for CharacterOS, over Chinese hardware partners. This is the same regulatory family showing up again in a different product, which suggests it's worth a standing relationship with export-control counsel across your portfolio rather than a one-off check.
+
+Penalties in this space run **$300K+ per violation**, and liability is strict — worth getting an actual export-control attorney to classify this (is it EAR99 / do any ECCNs apply / does the beta-tester list need geographic or entity screening) before any international users get access, rather than guessing. I'm not a lawyer and this isn't legal advice — it's the specific thing I'd bring to one first.
+
+**Everything else, roughly in priority order:**
+
+1. **Confidentiality / IP terms for uploaded layouts.** You're about to ask engineers to upload real (or public-sample) chip designs. A short clause is essential: PhotonLint claims no rights to uploaded files, doesn't use them for anything beyond generating the report, states retention/deletion terms. Given the beta-gate work we just did — a shared passphrase means every tester is otherwise anonymous to the server — this matters more, not less.
+
+2. **Foundry name usage.** Your rule files use real foundry names (GlobalFoundries, AIM Photonics, imec, Tower) attached to *approximate* rule values explicitly labeled "not the real NDA-gated PDK." That combination — real brand name + approximate technical numbers — is worth a specific legal look: trademark use of a foundry's name in a commercial product, and the reputational/liability angle if someone assumes "GlobalFoundries 45SPCLO" in your app means foundry-endorsed accuracy.
+
+3. **Liability disclaimer / limitation of warranty, as an actual signed term, not just a UI caveat.** Right now "not certified for tape-out sign-off" lives in a PDF footer and a sidebar note. If a real client relies on a PASS result and their $500K tape-out fails, the UI caveat is a much weaker defense than an explicit clickthrough agreement disclaiming warranties and limiting liability before they ever upload a file.
+
+4. **Basic privacy policy** if you collect any tester contact info (emails for the beta code), covering GDPR if any EU testers, CCPA if any California ones.
+
+5. **SOC 2 / ISO 27001** — not needed for a handful of beta testers, but flag it now because real enterprise photonics clients will very likely require it before they'll upload production IP, and that's a months-long process worth starting early if you're serious about the paid tiers.
+
+Given the stakes on #1 (export controls), I'd get that answered before sending the outreach messages we drafted — particularly before contacting imec or the SiEPIC/UBC community specifically.

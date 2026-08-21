@@ -1,0 +1,31 @@
+# AIM Photonics — Silicon Photonics PDK
+# Reference values sourced from public AIM Photonics MPW documentation and published papers.
+# Not an NDA-gated official PDK file. Verify against your foundry agreement before tape-out.
+
+id: aim-photonics
+name: "AIM Photonics"
+description: "American Institute for Manufacturing Integrated Photonics — 300mm SOI platform"
+technology: "AIM PDK"
+gridSize: 0.001  # µm — 1 nm grid
+
+layers:
+  - layer: 1
+    datatype: 0
+    name: "Si Waveguide (Strip)"
+    minWidth: 0.45      # µm — single-mode strip WG on 220 nm SOI
+    minSpacing: 0.30    # µm — conservative gap to prevent crosstalk on 300mm wafer
+    minBendRadius: 3.0  # µm — minimum for < 0.5 dB excess bend loss
+
+  - layer: 2
+    datatype: 0
+    name: "SiN Waveguide"
+    minWidth: 0.80      # µm — SiN requires wider WG for single-mode at 1310/1550 nm
+    minSpacing: 0.40    # µm — SiN-to-SiN isolation gap
+    minBendRadius: 80.0 # µm — SiN has weak index contrast; tight bends are very lossy
+
+  - layer: 3
+    datatype: 0
+    name: "Ge Photodetector Active"
+    minWidth: 1.00      # µm — minimum Ge mesa width for photodetector fabrication
+    minSpacing: 0.50    # µm — Ge-to-Ge isolation
+    minBendRadius: 0.0  # µm — Ge regions are rectangular mesas; not applicable
