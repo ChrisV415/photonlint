@@ -29,15 +29,15 @@ export default function S03Solution() {
           Automated Verification
         </div>
         <h2 style={{ fontSize: "3.5vw", fontWeight: 800, margin: "0 0 2vh 0", lineHeight: 1.1, letterSpacing: "-0.02em" }}>
-          PhotonLint catches violations before you tape out
+          PhotonLint surfaces likely geometry issues before formal review
         </h2>
         <p style={{ fontSize: "1.5vw", fontWeight: 400, color: "#475569", margin: "0 0 3.5vh 0", lineHeight: 1.5 }}>
-          Upload a GDSII layout, select your foundry PDK, and get a full layer-aware compliance report in seconds — no EDA license required.
+          Upload a GDSII layout, select a reference profile, and get a layer-aware preliminary geometry screen in seconds — before the foundry’s official flow.
         </p>
         <div style={{ display: "flex", flexDirection: "column", gap: "1.5vh" }}>
           <div style={{ display: "flex", gap: "1.5vw", alignItems: "center", background: "#FFFFFF", padding: "1.5vh 1.8vw", borderRadius: "0.8vw", border: "1px solid #E2E8F0", boxShadow: "0 0.5vw 1.5vw rgba(30, 58, 95, 0.05)" }}>
             <div style={{ width: "0.8vw", height: "0.8vw", minWidth: "0.8vw", backgroundColor: "#0D9488", borderRadius: "50%" }} />
-            <div style={{ fontSize: "1.4vw", fontWeight: 500, color: "#1E3A5F" }}>Layer-aware — checks each PDK layer against foundry specs</div>
+            <div style={{ fontSize: "1.4vw", fontWeight: 500, color: "#1E3A5F" }}>Layer-aware — screens configured layers against engineering thresholds</div>
           </div>
           <div style={{ display: "flex", gap: "1.5vw", alignItems: "center", background: "#FFFFFF", padding: "1.5vh 1.8vw", borderRadius: "0.8vw", border: "1px solid #E2E8F0", boxShadow: "0 0.5vw 1.5vw rgba(30, 58, 95, 0.05)" }}>
             <div style={{ width: "0.8vw", height: "0.8vw", minWidth: "0.8vw", backgroundColor: "#0D9488", borderRadius: "50%" }} />
@@ -45,7 +45,7 @@ export default function S03Solution() {
           </div>
           <div style={{ display: "flex", gap: "1.5vw", alignItems: "center", background: "#FFFFFF", padding: "1.5vh 1.8vw", borderRadius: "0.8vw", border: "1px solid #E2E8F0", boxShadow: "0 0.5vw 1.5vw rgba(30, 58, 95, 0.05)" }}>
             <div style={{ width: "0.8vw", height: "0.8vw", minWidth: "0.8vw", backgroundColor: "#0D9488", borderRadius: "50%" }} />
-            <div style={{ fontSize: "1.4vw", fontWeight: 500, color: "#1E3A5F" }}>PDF report ready for foundry submission</div>
+            <div style={{ fontSize: "1.4vw", fontWeight: 500, color: "#1E3A5F" }}>Clear findings for engineering review before foundry submission</div>
           </div>
         </div>
       </div>

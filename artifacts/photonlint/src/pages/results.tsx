@@ -5,7 +5,7 @@ import { Layout } from '@/components/layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { StatusBadge } from '@/components/status-badge';
-import { Download, FileText, MapPin, ArrowLeft, ArrowUpDown, Layers, Loader2 } from 'lucide-react';
+import { Download, FileText, MapPin, ArrowLeft, ArrowUpDown, Layers, Loader2, ShieldAlert } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import type { DrcViolation, LayoutData } from '@workspace/api-client-react';
 import { LayoutViewer } from '@/components/layout-viewer';
@@ -15,6 +15,11 @@ type SortField = 'severity' | 'rule' | 'location';
 type SortOrder = 'asc' | 'desc';
 
 const SEVERITY_ORDER: Record<string, number> = { critical: 0, warning: 1, info: 2 };
+const DEFAULT_SCREENING_CONTEXT = {
+  ruleSourceLabel: 'Public reference estimate — not an NDA-gated official foundry PDK',
+  disclaimer: 'This is a preliminary geometry screen, not official foundry DRC, PDK validation, or tape-out sign-off.',
+  bendMethod: 'Bend findings use a local circumradius estimate from consecutive polygon vertices; they do not reconstruct the original waveguide centerline or curve.',
+};
 
 export default function Results() {
   const params = useParams();
@@ -163,6 +168,8 @@ export default function Results() {
     Number.isFinite(layoutData.bounds.maxY)
   );
   const safeViolations = Array.isArray(result.violations) ? result.violations : [];
+  const screening = (result as unknown as { screening?: Partial<typeof DEFAULT_SCREENING_CONTEXT> }).screening;
+  const screeningContext = { ...DEFAULT_SCREENING_CONTEXT, ...screening };
 
   return (
     <Layout>
@@ -183,6 +190,24 @@ export default function Results() {
           </div>
           <StatusBadge status={result.status} className="text-base px-4 py-2" />
         </div>
+
+        <Card className="border-amber-500/40 bg-amber-50/50 dark:bg-amber-950/15" data-testid="screening-disclaimer">
+          <CardHeader className="pb-2">
+            <div className="flex items-start gap-3">
+              <ShieldAlert className="w-5 h-5 shrink-0 text-amber-600 mt-0.5" />
+              <div>
+                <CardTitle className="text-base">Preliminary geometry screen — not foundry sign-off</CardTitle>
+                <CardDescription className="mt-1">
+                  <span className="font-medium text-foreground">Rule source:</span> {screeningContext.ruleSourceLabel}
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-1 text-sm text-muted-foreground">
+            <p>{screeningContext.disclaimer}</p>
+            <p>{screeningContext.bendMethod}</p>
+          </CardContent>
+        </Card>
 
         <div className="grid grid-cols-4 gap-4">
           <Card>
@@ -247,7 +272,8 @@ export default function Results() {
                   {Array.from(new Set((layoutData!.polygons ?? []).map((p) => p.layer))).length !== 1 ? 's' : ''}
                   {(layoutData!.configuredLayers?.length ?? 0) > 0 && (
                     <> · <span className="text-teal-600 dark:text-teal-400 font-medium">
-                      {layoutData!.configuredLayers!.length} PDK-checked
+                      {layoutData!.configuredLayers!.length} configured layer
+                      {layoutData!.configuredLayers!.length === 1 ? '' : 's'} screened
                       {' '}({layoutData!.configuredLayers!.map((l) => l.name).join(', ')})
                     </span></>
                   )}
@@ -416,9 +442,9 @@ export default function Results() {
         {result.status === 'pass' && safeViolations.length === 0 && (
           <Card className="border-green-500/20 bg-green-500/5">
             <CardContent className="pt-6 text-center py-12 space-y-4">
-              <p className="text-lg font-semibold text-green-700">All design rules passed</p>
+              <p className="text-lg font-semibold text-green-700">No critical findings in this preliminary screen</p>
               <p className="text-sm text-muted-foreground">
-                Layout meets all {result.foundryName} PDK requirements
+                This result is not official {result.foundryName} PDK validation or tape-out sign-off.
               </p>
               <Button onClick={downloadPDF} variant="outline" size="sm" data-testid="button-download-pdf-pass">
                 <FileText className="w-4 h-4 mr-2" />

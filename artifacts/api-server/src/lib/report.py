@@ -96,7 +96,11 @@ def build_pdf(run: dict) -> bytes:
 
     # Verdict
     if status == "pass":
-        elems.append(Paragraph("PASS — All DRC checks passed. Ready for tape-out.", verdict_pass_s))
+        elems.append(Paragraph(
+            "PRELIMINARY SCREEN COMPLETE — No critical findings in the configured checks. "
+            "This is not foundry approval or tape-out sign-off.",
+            verdict_pass_s,
+        ))
     elif status == "fail":
         elems.append(Paragraph(f"FAIL — {n_critical} critical violation(s), {n_warning} warning(s) found.", verdict_fail_s))
     else:
@@ -167,11 +171,11 @@ def build_pdf(run: dict) -> bytes:
     elems.append(Spacer(1, 20))
     elems.append(HRFlowable(width="100%", thickness=0.5, color=MGRY))
     elems.append(Paragraph(
-        "Foundry rules in this report are reference values. "
-        "Bend-radius measurements use circumradius of consecutive vertex triples (local radius "
-        "of curvature); intentional sharp features such as right-angle couplers must be verified "
-        "manually against your foundry's official PDK DRC before tape-out. "
-        "PhotonLint does not replace your foundry's official DRC sign-off.",
+        "Rule source: reference estimate or engineering override, not an NDA-gated official foundry PDK deck. "
+        "This report is preliminary geometry screening only and is not foundry approval, PDK validation, or "
+        "tape-out sign-off. Bend findings use the circumradius of consecutive polygon vertices; they do not "
+        "reconstruct the original waveguide centerline or curve. Verify all findings and intentional sharp "
+        "features against the foundry's official flow before submission.",
         note_s,
     ))
 

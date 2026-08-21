@@ -206,7 +206,7 @@ export default function Home() {
 
       toast({
         title: 'DRC check complete',
-        description: `${result.status === 'pass' ? 'All checks passed' : `${result.violationCount} violations found`}`,
+        description: `${result.status === 'pass' ? 'No critical findings in this preliminary screen' : `${result.violationCount} findings returned`}`,
       });
 
       setLocation(`/results/${result.id}`);
@@ -234,15 +234,15 @@ export default function Home() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Design Rule Check</h1>
           <p className="text-muted-foreground mt-1">
-            Upload a GDSII layout file and verify against foundry PDK requirements
+            Upload a GDSII layout file for preliminary geometry screening against configurable reference thresholds
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Select Foundry PDK</CardTitle>
-              <CardDescription>Choose the target foundry for design rule verification</CardDescription>
+              <CardTitle>Select Reference Profile</CardTitle>
+              <CardDescription>Choose the target platform for preliminary screening — not official foundry sign-off</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
@@ -472,7 +472,7 @@ export default function Home() {
                     <p className="text-xs text-muted-foreground italic">
                       {selectedFoundry.hasOverride
                         ? 'Using your custom values — click "Edit Custom Rules" to change or reset.'
-                        : 'Reference values — override with your signed foundry PDK values before tape-out.'}
+                        : 'Public reference estimates — use a customer-approved rule source and the foundry’s official flow before submission.'}
                     </p>
                   )}
                 </div>
@@ -575,10 +575,10 @@ export default function Home() {
             {isUploading ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Running DRC Check...
+                Running Preliminary Screen...
               </>
             ) : (
-              <>Run DRC Check</>
+              <>Run Preliminary Screen</>
             )}
           </Button>
         </form>

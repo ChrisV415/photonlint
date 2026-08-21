@@ -12,6 +12,7 @@ import { and, desc, sql, count, eq } from "drizzle-orm";
 import { FOUNDRIES, getEffectiveRules } from "./foundries.js";
 import { requireAuth } from "../middlewares/requireAuth.js";
 import { requireAuthOrApiKey, getEffectiveUserId } from "../middlewares/apiKeyAuth.js";
+import { buildScreeningContext, screeningContextFromLayoutData } from "../lib/screening.js";
 
 const router: IRouter = Router();
 
@@ -77,6 +78,7 @@ interface DrcEngineResult {
   layoutData: {
     bounds: { minX: number; minY: number; maxX: number; maxY: number };
     polygons: Array<{ layer: number; datatype: number; vertices: number[][] }>;
+    screening?: unknown;
   } | null;
 }
 
@@ -336,6 +338,7 @@ router.post(
       gridSize: effectiveRules.gridSize,
       layers: effectiveRules.layers,
     };
+    const screening = buildScreeningContext(effectiveRules.hasOverride);
 
     try {
       drcResult = await runPythonDrc(file.path, JSON.stringify(rulesPayload));
@@ -351,6 +354,7 @@ router.post(
 
     const processingTimeMs = Date.now() - startMs;
     const userId = getEffectiveUserId(req);
+    const layoutData = { ...(drcResult.layoutData ?? {}), screening };
 
     let saved;
     try {
@@ -366,7 +370,7 @@ router.post(
           passedChecks: drcResult.passedChecks,
           totalChecks: drcResult.totalChecks,
           violations: drcResult.violations,
-          layoutData: drcResult.layoutData ?? null,
+          layoutData,
           errorMessage: drcResult.errorMessage ?? null,
           processingTimeMs,
         })
@@ -388,6 +392,7 @@ router.post(
       totalChecks: saved.totalChecks,
       violations: saved.violations ?? [],
       layoutData: saved.layoutData ?? null,
+      screening,
       errorMessage: saved.errorMessage,
       checkedAt: saved.checkedAt,
       processingTimeMs: saved.processingTimeMs,
@@ -461,9 +466,11 @@ router.post(
 
     // layoutData is optional — the CLI may omit it to keep the payload small
     // (polygon vertices are derived from GDS but some customers still prefer not to upload them).
-    const layoutData = (body?.layoutData != null && typeof body.layoutData === "object")
+    const importedLayoutData = (body?.layoutData != null && typeof body.layoutData === "object")
       ? body.layoutData as object
       : null;
+    const screening = buildScreeningContext(false);
+    const layoutData = { ...(importedLayoutData ?? {}), screening };
 
     const errorMessage = (typeof body?.errorMessage === "string") ? body.errorMessage : null;
 
@@ -505,6 +512,7 @@ router.post(
       totalChecks: saved.totalChecks,
       violations: saved.violations ?? [],
       layoutData: saved.layoutData ?? null,
+      screening,
       errorMessage: saved.errorMessage,
       checkedAt: saved.checkedAt,
       processingTimeMs: saved.processingTimeMs,
@@ -657,6 +665,7 @@ router.get("/drc/runs/:id", requireAuth, async (req, res, next): Promise<void> =
     totalChecks: run.totalChecks,
     violations: run.violations ?? [],
     layoutData: run.layoutData ?? null,
+    screening: screeningContextFromLayoutData(run.layoutData),
     errorMessage: run.errorMessage,
     checkedAt: run.checkedAt,
     processingTimeMs: run.processingTimeMs,
@@ -700,6 +709,7 @@ router.get("/drc/runs/:id/report.pdf", requireAuth, async (req, res, next): Prom
     passedChecks: run.passedChecks,
     totalChecks: run.totalChecks,
     violations: run.violations,
+    screening: screeningContextFromLayoutData(run.layoutData),
     errorMessage: run.errorMessage,
     checkedAt: run.checkedAt,
     processingTimeMs: run.processingTimeMs,

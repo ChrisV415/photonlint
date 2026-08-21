@@ -116,7 +116,7 @@ function LandingPage() {
           <h1 className="text-3xl font-bold tracking-tight">PhotonLint</h1>
         </div>
         <p className="text-muted-foreground text-lg leading-relaxed">
-          Design Rule Checker for Silicon Photonics. Upload a GDSII file and get instant feedback against foundry PDK rules.
+          Preliminary geometry screening for silicon photonics. Upload a GDSII file to find likely spacing, width, grid, and bend-geometry issues before formal foundry review.
         </p>
         <div className="flex gap-3 justify-center pt-2">
           <button
