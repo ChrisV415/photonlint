@@ -6,3 +6,4 @@
 - [Override key auth pattern](override-key-auth.md) — PUT/DELETE /foundries/:id/override gated by FOUNDRY_OVERRIDE_KEY env secret + X-Override-Key header; client uses setOverrideKey() from api-client-react
 - [Clerk auth implementation](clerk-auth.md) — Replit-managed Clerk; proxy before body parsers; userId nullable on drc_runs; Tailwind v4 needs optimize:false; never gate clerkProxyUrl on NODE_ENV
 - [GitHub source sync](github-source-sync.md) — Connector-backed GitHub uploads need rate limiting; keep generated source ZIPs out of the repository
+- [Preliminary screening positioning](preliminary-screening-positioning.md) — PhotonLint is geometry screening, never official PDK validation or foundry sign-off without licensed, validated rule sources
